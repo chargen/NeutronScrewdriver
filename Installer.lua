@@ -12,10 +12,11 @@ function fetch_upgrade()
       return false;
     end
 
-    local file = fs.open(path, "r");
+    local file = fs.open(path, "w");
     file.write(response.readAll());
-
+    file.flush();
     file.close();
+    
     response.close();
 
     return true;
@@ -37,7 +38,6 @@ function fetch_upgrade()
   --fetch upgrade from github
   for k, v in ipairs(manifest) do
     download_file(v.file, "/ns-upgrade/" .. v.file)
-    print(v);
     os.sleep(1);
   end
 
