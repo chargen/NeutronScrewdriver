@@ -1,5 +1,9 @@
 -- This file is downloaded by the install script (see readme.md). It runs when the computer is rebooted (it's named startup by the download script).
 
+function http_get(url)
+  return http.get(url .. "?" .. math.random(10000));
+end
+
 function fetch_upgrade()
 
   --helper function to download a URL into a file
@@ -7,7 +11,7 @@ function fetch_upgrade()
 
     print("Downloading: " .. name);
 
-    local response = http.get("https://raw.githubusercontent.com/martindevans/NeutronScrewdriver/master/src/" .. name);
+    local response = http_get("https://raw.githubusercontent.com/martindevans/NeutronScrewdriver/master/src/" .. name);
     if response.getResponseCode() ~= 200 then
       print(" -> Failed!");
       os.sleep(10);
@@ -31,7 +35,7 @@ function fetch_upgrade()
   fs.makeDir("/ns-upgrade");
 
   --fetch manifest from github
-  local manifest_request = http.get("https://raw.githubusercontent.com/martindevans/NeutronScrewdriver/master/src/manifest.lua");
+  local manifest_request = http_get("https://raw.githubusercontent.com/martindevans/NeutronScrewdriver/master/src/manifest.lua");
   if manifest_request.getResponseCode() ~= 200 then
     return false;
   end
