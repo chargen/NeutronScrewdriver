@@ -108,6 +108,7 @@ function apply_upgrade()
     if fs.exists(path) then
       fs.delete(path);
     end
+    print("Creating " .. path)
     local handle = fs.open(path, "w");
     handle.write(content);
     handle.flush();
