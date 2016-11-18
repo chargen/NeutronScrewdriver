@@ -98,7 +98,7 @@ function apply_upgrade()
     end
 
     --Check if the destination file already exists and apply patch function
-    if v.install and type(v.install) == "function" and fs.exists(path) then
+    if v.merge and type(v.merge) == "function" and fs.exists(path) then
       local oldHandle = fs.open(path, "r");
       local oldContent = oldHandle.readAll();
       oldHandle.close();
