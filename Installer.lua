@@ -44,7 +44,7 @@ function fetch_upgrade()
   manifest = manifest();
 
   --Save manifest to disk
-  local m_handle = fs.open("/ns-upgrade/manifest.lua");
+  local m_handle = fs.open("/ns-upgrade/manifest.lua", "w");
   m_handle.write(manifest_content);
   m_handle.flush();
   m_handle.close();
