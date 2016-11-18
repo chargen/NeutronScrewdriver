@@ -93,7 +93,7 @@ function apply_upgrade()
     end
 
     --Make relative to the ns directory (except for startup file, that's special and has to go in the root)
-    if path ~= startup then
+    if path ~= "startup" then
       path = "ns/" .. path;
     end
 
