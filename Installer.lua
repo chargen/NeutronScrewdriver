@@ -39,9 +39,6 @@ function fetch_upgrade()
       os.sleep(1);
     end
 
-    --we've fetched the update, reboot. This is the startup script so it will run again and apply the update
-    os.reboot();
-
   end
 end
 
