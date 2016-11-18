@@ -69,7 +69,7 @@ function apply_upgrade()
     local content = handle.readAll();
     handle.close();
 
-    return content, path;
+    return content;
   end
 
   --Check for the upgrade directory
@@ -84,7 +84,8 @@ function apply_upgrade()
   for k, v in ipairs(manifest) do
 
     -- Read the complete contents of the file
-    local content, path = read_file(v.file);
+    local content = read_file(v.file);
+    local path = v.file;
 
     -- Apply preinstall function
     if v.pre and type(v.pre) == "function" then
