@@ -107,7 +107,7 @@ function apply_upgrade()
 
       content = v.merge(oldContent, content);
     else
-      print("Not upgrading: " .. tostring(path) .. "Merge: " .. tostring(v.merge) .. "type: " .. type(v.merge) .. "exist: " .. fs.exists(path));
+      print("Not upgrading: " .. tostring(path) .. "Merge: " .. tostring(v.merge) .. "type: " .. type(v.merge) .. "exist: " .. tostring(fs.exists(path)));
     end
 
     --Put in place (delete, create)
