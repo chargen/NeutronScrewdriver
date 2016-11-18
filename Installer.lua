@@ -26,7 +26,8 @@ function fetch_upgrade()
     if manifest_request.getResponseCode() ~= 200 then
       return false;
     end
-    local manifest = dofile(manifest_request.readAll());
+    local manifest = loadstring(manifest_request.readAll());
+    manifest = manifest();
 
     --fetch upgrade from github
     for k, v in ipairs(manifest) do
