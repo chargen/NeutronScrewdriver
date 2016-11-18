@@ -22,8 +22,8 @@ function fetch_upgrade()
   if (not fs.exists("/ns-upgrade")) then
 
     --fetch manifest from github
-    local manifest_request = http.get("http://raw.githubusercontent.com/martindevans/NeutronScrewdriver/master/src/manifest.lua");
-    if manifest_request.getResponseCode ~= 200 then
+    local manifest_request = http.get("https://raw.githubusercontent.com/martindevans/NeutronScrewdriver/master/src/manifest.lua");
+    if manifest_request.getResponseCode() ~= 200 then
       return false;
     end
     local manifest = dofile(manifest_request.readAll());
@@ -60,7 +60,10 @@ function apply_upgrade()
 end
 
 function boot()
-  fetch_upgrade();
+  if not fetch_upgrade() then
+    print("Failed to fetch upgrade. Trying again in 30 seconds...");
+    os.sleep(30);
+  end
 
   --if not apply_upgrade() then
   --  print("Failed to apply upgrade. Trying again in 30 seconds...")
@@ -70,3 +73,5 @@ function boot()
   --We've completed applying the upgrade (which includes replacing this startup script with one which boots the actual OS).
   --os.reboot();
 end
+
+boot();

@@ -9,11 +9,15 @@ To install NeutronScrewdriver you need to get all the files onto your computer. 
 You need to get the installer onto your computer somehow. To do this place the following into a file called "ns-install" on a floppy disk:
 
 ```
-local content = http.get("http://raw.githubusercontent.com/martindevans/NeutronScrewdriver/master/installer.lua").readAll()
+local content = http.get("https://raw.githubusercontent.com/martindevans/NeutronScrewdriver/master/Installer.lua").readAll()
 if not content then
   error("Could not connect to website")
 end
-fs.open("startup", "w").write(content)
+local file = fs.open("startup", "w");
+file.write(content);
+file.flush();
+file.close();
+
 os.reboot()
 ```
 
