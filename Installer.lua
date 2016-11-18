@@ -5,10 +5,10 @@ function fetch_upgrade()
   --helper function to download a URL into a file
   function download_file(name)
 
-    print("Downloading: '" .. name);
+    print("Downloading: " .. name);
 
     local response = http.get("https://raw.githubusercontent.com/martindevans/NeutronScrewdriver/master/src/" .. name);
-    if response.getResponseCode ~= 200 then
+    if response.getResponseCode() ~= 200 then
       print(" -> Failed!");
       os.sleep(10);
       return false;
