@@ -39,8 +39,15 @@ function fetch_upgrade()
   if manifest_request.getResponseCode() ~= 200 then
     return false;
   end
-  local manifest = loadstring(manifest_request.readAll());
+  local manifest_content = manifest_request.readAll();
+  local manifest = loadstring(manifest_content);
   manifest = manifest();
+
+  --Save manifest to disk
+  local m_handle = fs.open("/ns-upgrade/manifest.lua");
+  m_handle.write(manifest_content);
+  m_handle.flush();
+  m_handle.close();
 
   --fetch upgrade from github
   for k, v in ipairs(manifest) do
