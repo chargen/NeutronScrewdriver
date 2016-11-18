@@ -1,6 +1,13 @@
 --This is a list of all files in NeutronScrewdriver with associated metadata
 return {
   {
+    file = "startup.lua",
+    pre = function(content, path)
+      return content, "startup";
+    end
+  },
+
+  {
     --Path to the file (relative to 'src' directory)
     file = "demo.lua",
 

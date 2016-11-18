@@ -92,8 +92,10 @@ function apply_upgrade()
       content, path = v.pre(content, path);
     end
 
-    --Make relative to the ns directory
-    path = "ns/" .. path;
+    --Make relative to the ns directory (except for startup file, that's special and has to go in the root)
+    if path ~= startup then
+      path = "ns/" .. path;
+    end
 
     --Check if the destination file already exists and apply patch function
     if v.install and type(v.install) == "function" and fs.exists(path) then
@@ -136,7 +138,9 @@ function boot()
   end
 
   --We've completed applying the upgrade (which includes replacing this startup script with one which boots the actual OS).
-  --os.reboot();
+  print("Upgraded. Rebooting...")
+  os.sleep(5);
+  os.reboot();
 end
 
 boot();
