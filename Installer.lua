@@ -19,7 +19,7 @@ function fetch_upgrade()
   end
 
   --Check for the upgrade directory. If we've already fetched it do nothing
-  if (not fs.exists("ns-upgrade")) then
+  if (not fs.exists("/ns-upgrade")) then
 
     --fetch manifest from github
     local manifest_request = http.get("http://raw.githubusercontent.com/martindevans/NeutronScrewdriver/master/src/manifest.lua");
@@ -30,6 +30,7 @@ function fetch_upgrade()
 
     --fetch upgrade from github
     for k, v in ipairs(manifest) do
+      download_file(v.file, "/ns-upgrade/" .. v.file)
       print(v);
       os.sleep(1);
     end
@@ -43,29 +44,29 @@ end
 function apply_upgrade()
 
   --Check for the upgrade directory
-  if (not fs.exists("ns-upgrade")) then
+  if (not fs.exists("/ns-upgrade")) then
     return false;
   end
 
   --Load the update manifest
-  local manifest = dofile("ns-upgrade/manifest.lua");
+  local manifest = dofile("/ns-upgrade/manifest.lua");
 
   --An upgrade is pending, copy over the files from upgrade directory (according to manifest of files)
   --todo!
 
   --Delete upgrade directory
-  fs.delete("ns-upgrade");
+  fs.delete("/ns-upgrade");
 
 end
 
 function boot()
   fetch_upgrade();
 
-  if not apply_upgrade() then
-    print("Failed to apply upgrade. Trying again in 30 seconds...")
-    os.sleep(30);
-  end
+  --if not apply_upgrade() then
+  --  print("Failed to apply upgrade. Trying again in 30 seconds...")
+  --  os.sleep(30);
+  --end
 
   --We've completed applying the upgrade (which includes replacing this startup script with one which boots the actual OS).
-  os.reboot();
+  --os.reboot();
 end
