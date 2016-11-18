@@ -21,25 +21,27 @@ function fetch_upgrade()
     return true;
   end
 
-  --Check for the upgrade directory. If we've already fetched it do nothing
-  if (not fs.exists("/ns-upgrade")) then
-
-    --fetch manifest from github
-    local manifest_request = http.get("https://raw.githubusercontent.com/martindevans/NeutronScrewdriver/master/src/manifest.lua");
-    if manifest_request.getResponseCode() ~= 200 then
-      return false;
-    end
-    local manifest = loadstring(manifest_request.readAll());
-    manifest = manifest();
-
-    --fetch upgrade from github
-    for k, v in ipairs(manifest) do
-      download_file(v.file, "/ns-upgrade/" .. v.file)
-      print(v);
-      os.sleep(1);
-    end
-
+  if fs.exists("/ns-upgrade") then
+    fs.delete("/ns-upgrade");
   end
+  fs.makeDir("/ns-upgrade");
+
+  --fetch manifest from github
+  local manifest_request = http.get("https://raw.githubusercontent.com/martindevans/NeutronScrewdriver/master/src/manifest.lua");
+  if manifest_request.getResponseCode() ~= 200 then
+    return false;
+  end
+  local manifest = loadstring(manifest_request.readAll());
+  manifest = manifest();
+
+  --fetch upgrade from github
+  for k, v in ipairs(manifest) do
+    download_file(v.file, "/ns-upgrade/" .. v.file)
+    print(v);
+    os.sleep(1);
+  end
+
+  return true;
 end
 
 function apply_upgrade()
