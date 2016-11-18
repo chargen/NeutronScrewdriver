@@ -3,16 +3,18 @@
 function fetch_upgrade()
 
   --helper function to download a URL into a file
-  function download_file(url, path)
+  function download_file(name)
 
-    print("Downloading: " .. url);
+    print("Downloading: '" .. name);
 
-    local response = http.get("https://raw.githubusercontent.com/martindevans/NeutronScrewdriver/master/src/" .. url);
+    local response = http.get("https://raw.githubusercontent.com/martindevans/NeutronScrewdriver/master/src/" .. name);
     if response.getResponseCode ~= 200 then
+      print(" -> Failed!");
+      os.sleep(10);
       return false;
     end
 
-    local file = fs.open(path, "w");
+    local file = fs.open("/ns-upgrade/" .. name, "w");
     file.write(response.readAll());
     file.flush();
     file.close();
@@ -37,7 +39,7 @@ function fetch_upgrade()
 
   --fetch upgrade from github
   for k, v in ipairs(manifest) do
-    download_file(v.file, "/ns-upgrade/" .. v.file)
+    download_file(v.file)
   end
 
   return true;
