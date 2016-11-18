@@ -66,7 +66,7 @@ function apply_upgrade()
     end
 
     local handle = fs.open(path, "r");
-    local content = fs.readAll();
+    local content = handle.readAll();
     handle.close();
 
     return content, path;
