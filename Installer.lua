@@ -84,7 +84,7 @@ function apply_upgrade()
   for k, v in ipairs(manifest) do
 
     -- Read the complete contents of the file
-    local content, path = read_file(v);
+    local content, path = read_file(v.file);
 
     -- Apply preinstall function
     if v.pre and type(v.pre) == "function" then
