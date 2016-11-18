@@ -87,6 +87,8 @@ function apply_upgrade()
     local content = read_file(v.file);
     local path = v.file;
 
+    print("Install:  " .. tostring(v.file));
+
     -- Apply preinstall function
     if v.pre and type(v.pre) == "function" then
       content, path = v.pre(content, path);
@@ -103,22 +105,21 @@ function apply_upgrade()
       local oldContent = oldHandle.readAll();
       oldHandle.close();
 
-      print("Upgrading: " .. path);
+      print(" -> Upgrade");
 
       content = v.merge(oldContent, content);
-    else
-      print("Not upgrading: " .. tostring(path) .. "Merge: " .. tostring(v.merge) .. "type: " .. type(v.merge) .. "exist: " .. tostring(fs.exists(path)));
     end
 
     --Put in place (delete, create)
     if fs.exists(path) then
       fs.delete(path);
     end
-    print("Installing: " .. path);
     local handle = fs.open(path, "w");
     handle.write(content);
     handle.flush();
     handle.close();
+
+    print(" -> Complete")
 
   end
 
