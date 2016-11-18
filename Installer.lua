@@ -50,7 +50,8 @@ function apply_upgrade()
   end
 
   --Load the update manifest
-  local manifest = dofile("/ns-upgrade/manifest.lua");
+  local manifest = loadstring("/ns-upgrade/manifest.lua");
+  manifest = manifest();
 
   --An upgrade is pending, copy over the files from upgrade directory (according to manifest of files)
   --todo!
