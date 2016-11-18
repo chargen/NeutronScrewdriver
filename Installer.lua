@@ -117,6 +117,9 @@ function apply_upgrade()
   --Delete upgrade directory
   fs.delete("/ns-upgrade");
 
+  --Success!
+  return true;
+
 end
 
 function boot()
