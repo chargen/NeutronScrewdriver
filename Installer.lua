@@ -7,7 +7,7 @@ function fetch_upgrade()
 
     print("Downloading: " .. url);
 
-    local response = http.get("http://raw.githubusercontent.com/martindevans/NeutronScrewdriver/master/src/" .. url);
+    local response = http.get("https://raw.githubusercontent.com/martindevans/NeutronScrewdriver/master/src/" .. url);
     if response.getResponseCode ~= 200 then
       return false;
     end
