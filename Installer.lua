@@ -94,7 +94,7 @@ function apply_upgrade()
 
     --Make relative to the ns directory (except for startup file, that's special and has to go in the root)
     if path ~= "startup" then
-      path = "ns/" .. path;
+      path = "/ns/" .. path;
     end
 
     --Check if the destination file already exists and apply patch function
@@ -106,6 +106,9 @@ function apply_upgrade()
       print("Upgrading: " .. path);
 
       content = v.merge(oldContent, content);
+    else
+      print("Not upgrading: " .. path .. "Merg: " .. tostring(v.merge) .. "type: " .. typeof(v.merge) .. "exist: " .. fs.exists(path));
+
     end
 
     --Put in place (delete, create)
