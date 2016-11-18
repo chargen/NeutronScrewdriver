@@ -4,8 +4,11 @@ function fetch_upgrade()
 
   --helper function to download a URL into a file
   function download_file(url, path)
+
+    print("Downloading: " .. url);
+
     local response = http.get("http://raw.githubusercontent.com/martindevans/NeutronScrewdriver/master/src/" .. url);
-    if manifest_request.getResponseCode ~= 200 then
+    if response.getResponseCode ~= 200 then
       return false;
     end
 
