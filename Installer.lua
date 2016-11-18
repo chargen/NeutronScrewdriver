@@ -18,6 +18,7 @@ function fetch_upgrade()
     file.write(response.readAll());
     file.flush();
     file.close();
+    print(" -> Complete")
 
     response.close();
 
