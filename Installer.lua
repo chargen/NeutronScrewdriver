@@ -52,6 +52,19 @@ end
 
 function apply_upgrade()
 
+  function read_file(name)
+    local path = "/ns-upgrade/" .. name;
+    if not fs.exists(path) then
+      error("Cannot find file: " .. path);
+    end
+
+    local handle = fs.open(path, "r");
+    local content = fs.readAll();
+    handle.close();
+
+    return content, path;
+  end
+
   --Check for the upgrade directory
   if (not fs.exists("/ns-upgrade")) then
     return false;
@@ -62,7 +75,38 @@ function apply_upgrade()
   manifest = manifest();
 
   --An upgrade is pending, copy over the files from upgrade directory (according to manifest of files)
-  --todo!
+  for k, v in ipairs(manifest) do
+
+    -- Read the complete contents of the file
+    local content, path = read_file(v);
+
+    -- Apply preinstall function
+    if v.pre and type(v.pre) == "function" then
+      content, path = v.pre(content, path);
+    end
+
+    --Make relative to the ns directory
+    path = "ns/" .. path;
+
+    --Check if the destination file already exists and apply patch function
+    if v.install and type(v.install) == "function" and fs.exists(path) then
+      local oldHandle = fs.open(path, "r");
+      local oldContent = oldHandle.readAll();
+      oldHandle.close();
+
+      content = v.merge(oldContent, content);
+    end
+
+    --Put in place (delete, create)
+    if fs.exists(path) then
+      fs.delete(path);
+    end
+    local handle = fs.open(path, "w");
+    handle.write(content);
+    handle.flush();
+    handle.close();
+
+  end
 
   --Delete upgrade directory
   fs.delete("/ns-upgrade");
@@ -75,10 +119,10 @@ function boot()
     os.sleep(30);
   end
 
-  --if not apply_upgrade() then
-  --  print("Failed to apply upgrade. Trying again in 30 seconds...")
-  --  os.sleep(30);
-  --end
+  if not apply_upgrade() then
+    print("Failed to apply upgrade. Trying again in 30 seconds...")
+    os.sleep(30);
+  end
 
   --We've completed applying the upgrade (which includes replacing this startup script with one which boots the actual OS).
   --os.reboot();
