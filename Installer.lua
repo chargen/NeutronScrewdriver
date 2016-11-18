@@ -16,7 +16,7 @@ function fetch_upgrade()
     file.write(response.readAll());
     file.flush();
     file.close();
-    
+
     response.close();
 
     return true;
@@ -38,7 +38,6 @@ function fetch_upgrade()
   --fetch upgrade from github
   for k, v in ipairs(manifest) do
     download_file(v.file, "/ns-upgrade/" .. v.file)
-    os.sleep(1);
   end
 
   return true;
