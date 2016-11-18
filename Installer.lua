@@ -103,6 +103,8 @@ function apply_upgrade()
       local oldContent = oldHandle.readAll();
       oldHandle.close();
 
+      print("Upgrading: " .. path);
+
       content = v.merge(oldContent, content);
     end
 
@@ -110,7 +112,7 @@ function apply_upgrade()
     if fs.exists(path) then
       fs.delete(path);
     end
-    print("Creating " .. path)
+    print("Installing: " .. path);
     local handle = fs.open(path, "w");
     handle.write(content);
     handle.flush();
