@@ -158,7 +158,14 @@ function create_fs()
       end
     end,
 
-    --exists
+    exists = function(path)
+      local parts, mount, status = GetMount(path);
+      if mount then
+        return mount:exists(table.concat(parts, "/"));
+      else
+        return false;
+      end
+    end,
     --makeDir
     --find
 
