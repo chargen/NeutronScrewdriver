@@ -2,9 +2,7 @@
 return {
   {
     file = "startup.lua",
-    pre = function(content, path)
-      return content, "startup";
-    end
+    pre = function(content, path) return content, "startup"; end  --Rename to "startup"
   },
 
   {
