@@ -149,7 +149,7 @@ function create_fs()
     --getFreeSpace
     --getDrive
 
-    function list(path)
+    list = function(path)
       local parts, mount, status = GetMount(path);
       if mount then
         return mount:list(table.concat(parts, "/"));
