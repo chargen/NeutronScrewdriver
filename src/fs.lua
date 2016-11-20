@@ -59,8 +59,11 @@ function create_fs()
   --list of mounted paths (Path => Accessor)
   local mounts = {};
 
-  --an accessor for the root of the system (path parameter is always ignored, since this is the root by definition)
+  --an accessor for the root of the system
+  --in all the root accessor methods the 'path' parameter is ignored. This is because it accesses the root, so the path must always be "/"
   local rootAccessor = {
+
+    --Simply list all the mount points
     list = function(_)
       local result = {};
       for p, _ in pairs(mounts) do
@@ -69,18 +72,46 @@ function create_fs()
       return result;
     end,
 
-    --[[ todo:
-      open function(path, mode)
-      isReadonly function(path)
-      delete function(path)
-      isDir function(path)
-      getFreeSpace function(path)
-      getDrive function(path)
-      getSize function(path)
-      exists function(path)
-      makeDir function(path)
-      find function(path)
-    ]]
+    --todo: open function(path, mode)
+
+    isReadonly = function(_)
+      return true;
+    end,
+
+    delete = function(_)
+      return nil;
+    end,
+
+    isDir = function(_)
+      return true;
+    end,
+
+    getFreeSpace = function(_)
+      return 0;
+    end,
+
+    getDrive = function(_)
+      --This can be one of:
+      -- - hdd (stored on this machine)
+      -- - rom (stored in rom on this machine)
+      -- - <side> (the side the floppy drive is attached to)
+      -- It's debateable exactly what the right response is here!
+      return "rom";
+    end,
+
+    getSize = function(_)
+      return 0;
+    end,
+
+    exists = function(_)
+      return true;
+    end,
+
+    makeDir = function(_)
+      --The semantics of this function is to silently fail is the path cannot be created (e.g. because it collides with a filename)
+    end
+
+    --todo: find function(wildcard)
   };
 
   --Split a path on the / path separator
