@@ -151,7 +151,7 @@ function create_fs()
   function make_mount_func(name, default, func)
     return function(path)
 
-      print(name .. " @ " .. path)
+      print(name .. " @ " .. path);
 
       local parts, mount, status = GetMount(path);
       if mount then
@@ -197,7 +197,7 @@ function create_fs()
     delete       = make_mount_func("delete",       nil, function(m) return m.delete end),
     isDir        = make_mount_func("isDir",        nil, function(m) return m.isDir end),
     getFreeSpace = make_mount_func("getFreeSpace", nil, function(m) return m.getFreeSpace end),
-    getDrive     = make_mount_func("getDrive"      nil, function(m) return m.getDrive end),
+    getDrive     = make_mount_func("getDrive",     nil, function(m) return m.getDrive end),
     getSize      = make_mount_func("getSize",      nil, function(m) return m.getSize end),
     list         = make_mount_func("list",         nil, function(m) return m.list end),
     exists       = make_mount_func("exists",       nil, function(m) return m.exists end),
