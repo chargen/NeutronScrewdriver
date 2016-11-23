@@ -1,62 +1,62 @@
---Save the normal computercraft FS table
-local _fs = fs;
-
---Create a mount which accesses part of the normal filesystem under some path
-local function CreateFilesystemMount(root)
-  return {
-    root = function()
-      return root;
-    end,
-
-    open = function(path, mode)
-      return _fs.open(_fs.combine(root, path), mode);
-    end,
-
-    isReadonly = function(path)
-      return _fs.isReadonly(_fs.combine(root, path));
-    end,
-
-    delete = function(path)
-      return _fs.delete(_fs.combine(root, path));
-    end,
-
-    isDir = function(path)
-      return _fs.isDir(_fs.combine(root, path));
-    end,
-
-    getFreeSpace = function(path)
-      return _fs.getFreeSpace(_fs.combine(root, path));
-    end,
-
-    getDrive = function(path)
-      return _fs.getDrive(_fs.combine(root, path));
-    end,
-
-    getSize = function(path)
-      return _fs.getSize(_fs.combine(root, path));
-    end,
-
-    list = function(path)
-      return _fs.list(_fs.combine(root, path));
-    end,
-
-    exists = function(path)
-      return _fs.exists(_fs.combine(root, path));
-    end,
-
-    makeDir = function(path)
-      return _fs.makeDir(_fs.combine(root, path));
-    end,
-
-    find = function(path)
-      return _fs.find(_fs.combine(root, path));
-    end,
-  };
-end
-
 function create_fs()
   --list of mounted paths (Path => Accessor)
   local mounts = {};
+
+  --Save the normal computercraft FS table
+  local _fs = fs;
+
+  --Create a mount which accesses part of the normal filesystem under some path
+  local function CreateFilesystemMount(root)
+    return {
+      root = function()
+        return root;
+      end,
+
+      open = function(path, mode)
+        return _fs.open(_fs.combine(root, path), mode);
+      end,
+
+      isReadonly = function(path)
+        return _fs.isReadonly(_fs.combine(root, path));
+      end,
+
+      delete = function(path)
+        return _fs.delete(_fs.combine(root, path));
+      end,
+
+      isDir = function(path)
+        return _fs.isDir(_fs.combine(root, path));
+      end,
+
+      getFreeSpace = function(path)
+        return _fs.getFreeSpace(_fs.combine(root, path));
+      end,
+
+      getDrive = function(path)
+        return _fs.getDrive(_fs.combine(root, path));
+      end,
+
+      getSize = function(path)
+        return _fs.getSize(_fs.combine(root, path));
+      end,
+
+      list = function(path)
+        return _fs.list(_fs.combine(root, path));
+      end,
+
+      exists = function(path)
+        return _fs.exists(_fs.combine(root, path));
+      end,
+
+      makeDir = function(path)
+        return _fs.makeDir(_fs.combine(root, path));
+      end,
+
+      find = function(path)
+        return _fs.find(_fs.combine(root, path));
+      end,
+    };
+  end
 
   --an accessor for the root of the system
   --in all the root accessor methods the 'path' parameter is ignored. This is because it accesses the root, so the path must always be "/"
@@ -216,8 +216,8 @@ function create_fs()
   }
 
   --Mount the root of the internal HDD to the path "hdd"
-  fs.mount("hdd", CreateFilesystemMount("/"));
-  print("Mounted local disk @ /hdd");
+  fs.mount("rom", CreateFilesystemMount("/rom"));
+  print("Mounted local ROM @ /rom");
 
   return fs;
 

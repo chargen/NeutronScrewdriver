@@ -22,7 +22,6 @@ return {
     pre = function(content, path) return content, "startup"; end  --Rename to "startup"
   },
 
-  {
-    file = "fs.lua",
-  },
+  { file = "fs.lua" },
+  { file = "shell.lua" }
 };
