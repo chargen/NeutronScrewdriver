@@ -231,6 +231,7 @@ function create_fs()
 
   --Mount the root of the internal HDD to the path "hdd"
   fs.mount("hdd", CreateFilesystemMount("/"));
+  print("Mounted local disk @ /hdd")
 
 end
 create_fs();
