@@ -176,7 +176,15 @@ function create_fs()
     --open
     --isReadonly
     --delete
-    --isDir
+    isDir = function(path)
+      local parts, mount, status = GetMount(path);
+      if mount then
+        return mount:isDir(table.concat(parts, "/"));
+      else
+        return false;
+      end
+    end,
+
     --getFreeSpace
     --getDrive
 
