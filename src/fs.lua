@@ -56,6 +56,9 @@ end
 
 function create_fs()
 
+  --Store the print function for the FS
+  local print = _G.print;
+
   --list of mounted paths (Path => Accessor)
   local mounts = {};
 
@@ -145,8 +148,11 @@ function create_fs()
     return parts, mount, "ok";
   end
 
-  function make_mount_func(default, func)
+  function make_mount_func(name, default, func)
     return function(path)
+
+      print(name .. " @ " .. path)
+
       local parts, mount, status = GetMount(path);
       if mount then
         local f = func(mount);
@@ -186,17 +192,17 @@ function create_fs()
     end,
 
     --Pass these functions directly onto the relevant mount point
-    open         = make_mount_func(nil, function(m) return m.open end),
-    isReadonly   = make_mount_func(nil, function(m) return m.isReadonly end),
-    delete       = make_mount_func(nil, function(m) return m.delete end),
-    isDir        = make_mount_func(nil, function(m) return m.isDir end),
-    getFreeSpace = make_mount_func(nil, function(m) return m.getFreeSpace end),
-    getDrive     = make_mount_func(nil, function(m) return m.getDrive end),
-    getSize      = make_mount_func(nil, function(m) return m.getSize end),
-    list         = make_mount_func(nil, function(m) return m.list end),
-    exists       = make_mount_func(nil, function(m) return m.exists end),
-    makeDir      = make_mount_func(nil, function(m) return m.makeDir end),
-    find         = make_mount_func(nil, function(m) return m.find end),
+    open         = make_mount_func("open",         nil, function(m) return m.open end),
+    isReadonly   = make_mount_func("isReadnly",    nil, function(m) return m.isReadonly end),
+    delete       = make_mount_func("delete",       nil, function(m) return m.delete end),
+    isDir        = make_mount_func("isDir",        nil, function(m) return m.isDir end),
+    getFreeSpace = make_mount_func("getFreeSpace", nil, function(m) return m.getFreeSpace end),
+    getDrive     = make_mount_func("getDrive"      nil, function(m) return m.getDrive end),
+    getSize      = make_mount_func("getSize",      nil, function(m) return m.getSize end),
+    list         = make_mount_func("list",         nil, function(m) return m.list end),
+    exists       = make_mount_func("exists",       nil, function(m) return m.exists end),
+    makeDir      = make_mount_func("makeDir",      nil, function(m) return m.makeDir end),
+    find         = make_mount_func("find",         nil, function(m) return m.find end),
 
     move = function(from, to)
       error("Not Implemented!");
@@ -221,7 +227,7 @@ function create_fs()
 
   --Mount the root of the internal HDD to the path "hdd"
   fs.mount("hdd", CreateFilesystemMount("/"));
-  print("Mounted local disk @ /hdd")
+  print("Mounted local disk @ /hdd");
 
 end
 create_fs();
