@@ -145,6 +145,18 @@ function create_fs()
     return parts, mount, "ok";
   end
 
+  function make_mount_func(default, func)
+    return function(path)
+      local parts, mount, status = GetMount(path);
+      if mount then
+        local f = func(mount);
+        f(table.concat(parts, "/"))
+      else
+        return default;
+      end
+    end
+  end
+
   local fs = {
 
     --Mount an accessor at a given path. An accessor must implement:
@@ -173,40 +185,18 @@ function create_fs()
       mounts[path] = nil;
     end,
 
-    --open
-    --isReadonly
-    --delete
-    isDir = function(path)
-      local parts, mount, status = GetMount(path);
-      if mount then
-        return mount.isDir(table.concat(parts, "/"));
-      else
-        return false;
-      end
-    end,
-
-    --getFreeSpace
-    --getDrive
-
-    list = function(path)
-      local parts, mount, status = GetMount(path);
-      if mount then
-        return mount.list(table.concat(parts, "/"));
-      else
-        return nil, "status";
-      end
-    end,
-
-    exists = function(path)
-      local parts, mount, status = GetMount(path);
-      if mount then
-        return mount.exists(table.concat(parts, "/"));
-      else
-        return false;
-      end
-    end,
-    --makeDir
-    --find
+    --Pass these functions directly onto the relevant mount point
+    open         = make_mount_func(nil, function(m) return m.open end),
+    isReadonly   = make_mount_func(nil, function(m) return m.isReadonly end),
+    delete       = make_mount_func(nil, function(m) return m.delete end),
+    isDir        = make_mount_func(nil, function(m) return m.isDir end),
+    getFreeSpace = make_mount_func(nil, function(m) return m.getFreeSpace end),
+    getDrive     = make_mount_func(nil, function(m) return m.getDrive end),
+    getSize      = make_mount_func(nil, function(m) return m.getSize end),
+    list         = make_mount_func(nil, function(m) return m.list end),
+    exists       = make_mount_func(nil, function(m) return m.exists end),
+    makeDir      = make_mount_func(nil, function(m) return m.makeDir end),
+    find         = make_mount_func(nil, function(m) return m.find end),
 
     move = function(from, to)
       error("Not Implemented!");
