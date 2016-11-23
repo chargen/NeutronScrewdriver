@@ -45,7 +45,9 @@ function create_fs()
       end,
 
       exists = function(path)
-        return _fs.exists(_fs.combine(root, path));
+        local p = _fs.combine(root, path);
+        print("exists" .. " @ " .. p);
+        return _fs.exists(p);
       end,
 
       makeDir = function(path)
@@ -146,9 +148,6 @@ function create_fs()
 
   function make_mount_func(name, default, func)
     return function(path)
-
-      print(name .. " @ " .. path);
-
       local parts, mount, status = GetMount(path);
       if mount then
         local f = func(mount);
