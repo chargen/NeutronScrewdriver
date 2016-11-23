@@ -55,10 +55,6 @@ local function CreateFilesystemMount(root)
 end
 
 function create_fs()
-
-  --Store the print function for the FS
-  local print = _G.print;
-
   --list of mounted paths (Path => Accessor)
   local mounts = {};
 
@@ -150,9 +146,6 @@ function create_fs()
 
   function make_mount_func(name, default, func)
     return function(path)
-
-      print(name .. " @ " .. path);
-
       local parts, mount, status = GetMount(path);
       if mount then
         local f = func(mount);
@@ -222,12 +215,11 @@ function create_fs()
     getDir = _fs.getDir
   }
 
-  --Replace the system "fs" API with our own
-  _G["fs"] = fs;
-
   --Mount the root of the internal HDD to the path "hdd"
   fs.mount("hdd", CreateFilesystemMount("/"));
   print("Mounted local disk @ /hdd");
 
+  return fs;
+
 end
-create_fs();
+return create_fs();
