@@ -27,16 +27,16 @@ function boot()
 This assumes loaders simply call print). If loaders mess with term.write and term.blit the formatting may break
 ]]
 
-    print("-> Loading " .. name);
+    default_print("-> Loading " .. name);
     prefix = " | " .. short_name .. ": ";
 
     load_func();
 
     prefix = "";
-    print("<- Loaded " .. name);
+    default_print("<- Loaded " .. name);
   end
 
-  print("Loading Neutron Screwdriver");
+  default_print("Loading Neutron Screwdriver");
   pretty_load("File System", "FS", init_filesystem);
 
   --restore default print
