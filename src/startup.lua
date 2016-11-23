@@ -11,21 +11,21 @@ function boot()
   local prefix = "";
   local default_print = print;
   print = function(v)
-    print(prefix .. tostring(v));
+    default_print(prefix .. tostring(v));
   end
 
   --Create a utility function for running a load in the context of a pretty print
   function pretty_load(name, short_name, load_func)
---[[ e.g. this will result in something like this:
+    --[[ e.g. this will result in something like this:
 
--> Loading File System
- | FS: Mounted Root
- | FS: Mounted Disk 'Left'
- | FS: Mounted Network 'Machine'
-<- Loaded File System
+    -> Loading File System
+     | FS: Mounted Root
+     | FS: Mounted Disk 'Left'
+     | FS: Mounted Network 'Machine'
+    <- Loaded File System
 
-This assumes loaders simply call print). If loaders mess with term.write and term.blit the formatting may break
-]]
+    This assumes loaders simply call print). If loaders mess with term.write and term.blit the formatting may break
+    ]]
 
     default_print("-> Loading " .. name);
     prefix = " | " .. short_name .. ": ";
