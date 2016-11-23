@@ -147,7 +147,7 @@ function create_fs()
   function make_mount_func(name, default, func)
     return function(path)
 
-      print(name .. " @ " .. path)
+      print(name .. " @ " .. path);
 
       local parts, mount, status = GetMount(path);
       if mount then
