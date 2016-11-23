@@ -179,7 +179,7 @@ function create_fs()
     isDir = function(path)
       local parts, mount, status = GetMount(path);
       if mount then
-        return mount:isDir(table.concat(parts, "/"));
+        return mount.isDir(table.concat(parts, "/"));
       else
         return false;
       end
@@ -191,7 +191,7 @@ function create_fs()
     list = function(path)
       local parts, mount, status = GetMount(path);
       if mount then
-        return mount:list(table.concat(parts, "/"));
+        return mount.list(table.concat(parts, "/"));
       else
         return nil, "status";
       end
@@ -200,7 +200,7 @@ function create_fs()
     exists = function(path)
       local parts, mount, status = GetMount(path);
       if mount then
-        return mount:exists(table.concat(parts, "/"));
+        return mount.exists(table.concat(parts, "/"));
       else
         return false;
       end

@@ -144,7 +144,7 @@ function boot()
 
   --We've completed applying the upgrade (which includes replacing this startup script with one which boots the actual OS).
   print("Upgraded. Rebooting...")
-  os.sleep(5);
+  os.sleep(2);
   os.reboot();
 end
 
