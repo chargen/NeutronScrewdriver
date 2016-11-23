@@ -46,8 +46,11 @@ function create_fs()
 
       exists = function(path)
         local p = _fs.combine(root, path);
-        print("exists" .. " @ " .. p);
-        return _fs.exists(p);
+        local r = _fs.exists(p);
+
+        print(tostring(r) .. "exists@ " .. p);
+
+        return r;
       end,
 
       makeDir = function(path)
