@@ -67,7 +67,7 @@ function create_fs()
     list = function(_)
       local result = {};
       for p, _ in pairs(mounts) do
-        table.insert(p);
+        table.insert(result, p);
       end
       return result;
     end,
