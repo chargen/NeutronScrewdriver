@@ -7,57 +7,38 @@ function create_fs()
 
   --Create a mount which accesses part of the normal filesystem under some path
   local function CreateFilesystemMount(root)
+
+    local verbose = true;
+
+    function make_path_func(name)
+      return function(path)
+        let p = _fs.combine(root, path);
+        let r = _fs[name](p);
+        if verbose then print(name .. " @ " .. p); end
+        return r;
+      end,
+    end
+
     return {
       root = function()
         return root;
       end,
 
       open = function(path, mode)
+        print("Open(" .. mode .. ") @ " .. path)
         return _fs.open(_fs.combine(root, path), mode);
       end,
 
-      isReadonly = function(path)
-        return _fs.isReadonly(_fs.combine(root, path));
-      end,
-
-      delete = function(path)
-        return _fs.delete(_fs.combine(root, path));
-      end,
-
-      isDir = function(path)
-        return _fs.isDir(_fs.combine(root, path));
-      end,
-
-      getFreeSpace = function(path)
-        return _fs.getFreeSpace(_fs.combine(root, path));
-      end,
-
-      getDrive = function(path)
-        return _fs.getDrive(_fs.combine(root, path));
-      end,
-
-      getSize = function(path)
-        return _fs.getSize(_fs.combine(root, path));
-      end,
-
-      list = function(path)
-        return _fs.list(_fs.combine(root, path));
-      end,
-
-      exists = function(path)
-        local p = _fs.combine(root, path);
-        local r = _fs.exists(p);
-        --print(tostring(r) .. " == exists@ " .. p);
-        return r;
-      end,
-
-      makeDir = function(path)
-        return _fs.makeDir(_fs.combine(root, path));
-      end,
-
-      find = function(path)
-        return _fs.find(_fs.combine(root, path));
-      end,
+      isReadonly = make_path_func("isReadonly"),
+      delete = make_path_func("delete"),
+      isDir = make_path_func("isDir"),
+      getFreeSpace = make_path_func("getFreeSpace"),
+      getDrive = make_path_func("getDrive"),
+      getSize = make_path_func("getSize"),
+      list = make_path_func("list"),
+      exists = make_path_func("exists"),
+      makeDir = make_path_func("makeDir"),
+      find = make_path_func("find")
     };
   end
 
@@ -149,9 +130,6 @@ function create_fs()
 
   function make_mount_func(name, default, func)
     return function(path)
-
-      print(name .. " @ " .. path);
-
       local parts, mount, status = GetMount(path);
       if mount then
         local f = func(mount);
@@ -221,7 +199,7 @@ function create_fs()
     getDir = _fs.getDir
   }
 
-  --Mount the root of the internal HDD to the path "hdd"
+  --Mount the root of the internal ROM to the path "rom"
   fs.mount("rom", CreateFilesystemMount("/rom"));
   print("Mounted local ROM @ /rom");
 
