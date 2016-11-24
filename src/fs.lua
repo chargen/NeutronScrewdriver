@@ -3,7 +3,7 @@ function create_fs()
   local mounts = {};
 
   --Save the normal computercraft FS table
-  local _fs = fs;
+  local _fs = _G.fs;
 
   --Create a mount which accesses part of the normal filesystem under some path
   local function CreateFilesystemMount(root)
@@ -47,9 +47,7 @@ function create_fs()
       exists = function(path)
         local p = _fs.combine(root, path);
         local r = _fs.exists(p);
-
-        print(tostring(r) .. "exists@ " .. p);
-
+        --print(tostring(r) .. " == exists@ " .. p);
         return r;
       end,
 
@@ -151,6 +149,9 @@ function create_fs()
 
   function make_mount_func(name, default, func)
     return function(path)
+
+      print(name .. " @ " .. path);
+
       local parts, mount, status = GetMount(path);
       if mount then
         local f = func(mount);
