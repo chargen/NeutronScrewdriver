@@ -8,7 +8,7 @@ function create_fs()
   --Create a mount which accesses part of the normal filesystem under some path
   local function CreateFilesystemMount(root)
 
-    local verbose = true;
+    local verbose = false;
 
     function make_path_func(name)
       return function(path)
@@ -170,7 +170,15 @@ function create_fs()
     end,
 
     --Pass these functions directly onto the relevant mount point
-    open         = make_mount_func("open",         nil, function(m) return m.open end),
+    open = function(path, mode)
+      local parts, mount, status = GetMount(path);
+      if mount then
+        local f = func(mount);
+        return f(table.concat(parts, "/"), mode)
+      else
+        return default;
+      end
+    end,
     isReadonly   = make_mount_func("isReadnly",    nil, function(m) return m.isReadonly end),
     delete       = make_mount_func("delete",       nil, function(m) return m.delete end),
     isDir        = make_mount_func("isDir",        nil, function(m) return m.isDir end),
