@@ -134,7 +134,7 @@ function create_fs()
       local parts, mount, status = GetMount(path);
       if mount then
         local f = func(mount);
-        f(table.concat(parts, "/"))
+        return f(table.concat(parts, "/"))
       else
         return default;
       end
