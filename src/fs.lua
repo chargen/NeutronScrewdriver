@@ -26,7 +26,7 @@ function create_fs()
       end,
 
       open = function(path, mode)
-        print("Open(" .. mode .. ") @ " .. path)
+        print("Open(" .. tostring(mode) .. ") @ " .. tostring(path))
         return _fs.open(_fs.combine(root, path), mode);
       end,
 
