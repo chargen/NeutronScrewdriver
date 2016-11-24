@@ -17,7 +17,7 @@ function create_fs()
         local r = f(p);
         if verbose then print(name .. " @ " .. p); end
         return r;
-      end,
+      end
     end
 
     return {
