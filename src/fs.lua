@@ -15,7 +15,7 @@ function create_fs()
         local p = _fs.combine(root, path);
         local f = _fs[name];
         local r = f(p);
-        if verbose then print(name .. " @ " .. p); end
+        if verbose then print(name .. " @ " .. p .. " == " .. tostring(r)); end
         return r;
       end
     end
