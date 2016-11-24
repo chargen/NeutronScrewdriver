@@ -13,7 +13,8 @@ function create_fs()
     function make_path_func(name)
       return function(path)
         let p = _fs.combine(root, path);
-        let r = _fs[name](p);
+        let f = _fs[name];
+        let r = f(p);
         if verbose then print(name .. " @ " .. p); end
         return r;
       end,
