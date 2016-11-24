@@ -12,9 +12,9 @@ function create_fs()
 
     function make_path_func(name)
       return function(path)
-        let p = _fs.combine(root, path);
-        let f = _fs[name];
-        let r = f(p);
+        local p = _fs.combine(root, path);
+        local f = _fs[name];
+        local r = f(p);
         if verbose then print(name .. " @ " .. p); end
         return r;
       end,
