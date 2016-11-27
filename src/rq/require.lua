@@ -25,20 +25,23 @@ return function(g)
       end
 
       --Now iterate the parts, seeing if it matches a file
+      local found_path = nil;
       for _, p in ipairs(parts) do
-        loaded = search(p, query);
-        if loaded then
+        found_path = search(p, query);
+        if found_path then
           break;
         end
       end
 
-      --if loaded if not nil then we found a path
-      if loaded then
-        loaded = dofile(loaded);
+      --if found_path if not nil then we found a path
+      if found_path then
+        loaded = dofile(found_path);
       end
 
       --Save whatever we found
-      g._LOADED[path] = loaded;
+      if loaded then
+        g._LOADED[path] = loaded;
+      end
 
     end
     return loaded;
