@@ -9,9 +9,12 @@ function search(frag, query)
 end
 
 return function(g)
-  g._LOADED = {};
+
+  local loaded_index = {};
+  g._LOADED = loaded_index;
+
   g.require = function(query)
-    local loaded = g._LOADED[query];
+    local loaded = loaded_index[query];
     if loaded == nil then
 
       --Search path (or default)
@@ -40,7 +43,9 @@ return function(g)
 
       --Save whatever we found
       if loaded then
-        g._LOADED[path] = loaded;
+        print(tostring(loaded));
+        print(tostring(loaded_index));
+        loaded_index[path] = loaded;
       end
 
     end
