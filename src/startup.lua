@@ -31,14 +31,16 @@ function boot()
     print("-> Loading " .. name);
     prefix = " | " .. short_name .. ": ";
 
-    load_func();
+    local inject = load_func();
+    inject(_G);
 
     prefix = "";
     print("<- Loaded " .. name);
   end
 
   default_print("Loading Neutron Screwdriver");
-  pretty_load("File System", "FS", function() _G.fs = dofile("ns/fs/fs.lua"); end);
+  pretty_load("Loader", "RQ", function() _G.require = dofile("ns/rq/require.lua"); end);
+  pretty_load("File System", "FS", function() dofile("ns/fs/fs.lua"); end);
   --pretty_load("Shell", "SH", function() _G.shell = dofile("ns/sh/sh.lua"); end);
 
   --restore default print

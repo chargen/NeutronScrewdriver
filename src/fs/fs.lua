@@ -26,7 +26,9 @@ function create_fs()
       end,
 
       open = function(path, mode)
-        print("Open(" .. tostring(mode) .. ") @ " .. tostring(path))
+        if verbose then
+          print("Open(" .. tostring(mode) .. ") @ " .. tostring(path))
+        end
         return _fs.open(_fs.combine(root, path), mode);
       end,
 
@@ -222,4 +224,8 @@ function create_fs()
   return fs;
 
 end
-return create_fs();
+
+--Return an injector function which will inject the FS into the given object
+return function(g)
+  g.fs = create_fs();
+end

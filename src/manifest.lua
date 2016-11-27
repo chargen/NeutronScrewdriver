@@ -25,5 +25,7 @@ return {
   { file = "fs/fs.lua" },
   { file = "fs/test.lua" },
 
+  { file = "rq/require.lua" },
+
   { file = "sh/sh.lua" }
 };
