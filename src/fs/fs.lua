@@ -59,7 +59,7 @@ function create_fs()
     open = function(_, _)
       --There are no files in the root, so all open calls will fail
       return nil;
-    end
+    end,
 
     isReadonly = function(_)
       return true;
