@@ -38,8 +38,8 @@ function boot()
   end
 
   default_print("Loading Neutron Screwdriver");
-  pretty_load("File System", "FS", function() _G.fs = dofile("ns/fs.lua"); end);
-  --pretty_load("Shell", "SH", function() _G.shell = dofile("ns/shell.lua"); end);
+  pretty_load("File System", "FS", function() _G.fs = dofile("ns/fs/fs.lua"); end);
+  --pretty_load("Shell", "SH", function() _G.shell = dofile("ns/sh/sh.lua"); end);
 
   --restore default print
   print = default_print;
