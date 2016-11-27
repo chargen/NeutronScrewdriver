@@ -216,7 +216,7 @@ function create_fs()
   print("Mounted local ROM @ /rom");
 
   --Test requireing things
-  local mod = require("ns/fs/test.lua");
+  local mod = dofile("ns/fs/test.lua");
   mod.hello_world();
 
   return fs;
