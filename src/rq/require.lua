@@ -25,7 +25,7 @@ return function(g)
       end
 
       --Now iterate the parts, seeing if it matches a file
-      for _, p in parts do
+      for _, p in ipairs(parts) do
         loaded = search(p, query);
         if loaded then
           break;
