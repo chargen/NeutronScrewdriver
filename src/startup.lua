@@ -39,9 +39,9 @@ function boot()
   end
 
   default_print("Loading Neutron Screwdriver");
-  pretty_load("Loader", "RQ", function() _G.require = dofile("ns/rq/require.lua"); end);
-  pretty_load("File System", "FS", function() dofile("ns/fs/fs.lua"); end);
-  --pretty_load("Shell", "SH", function() _G.shell = dofile("ns/sh/sh.lua"); end);
+  pretty_load("Loader", "RQ", function() return dofile("ns/rq/require.lua"); end);
+  pretty_load("File System", "FS", function() return dofile("ns/fs/fs.lua"); end);
+  --pretty_load("Shell", "SH", function() _G.shell = return dofile("ns/sh/sh.lua"); end);
 
   --restore default print
   print = default_print;
