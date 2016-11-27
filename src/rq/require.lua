@@ -1,6 +1,5 @@
 function search(frag, query)
   local path = string.gsub(frag, "?", query);
-  print(frag .. " " .. path);
 
   if fs.exists(path) and not fs.isDir(path) then
     return path;
@@ -43,9 +42,7 @@ return function(g)
 
       --Save whatever we found
       if loaded then
-        print(tostring(loaded));
-        print(tostring(loaded_index));
-        loaded_index[path] = loaded;
+        loaded_index[found_path] = loaded;
       end
 
     end
