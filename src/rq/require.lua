@@ -1,5 +1,6 @@
 function search(frag, query)
   local path = string.gsub(frag, "?", query);
+  print(frag .. " " .. path);
 
   if fs.exists(path) and not fs.isDir(path) then
     return path;
@@ -24,7 +25,6 @@ return function(g)
       local parts = {};
       for part in string.gmatch(search_path, "[^;]+") do
           table.insert(parts, part);
-          print(part);
       end
 
       --Now iterate the parts, seeing if it matches a file
