@@ -32,6 +32,11 @@ return function(g)
         end
       end
 
+      --if loaded if not nil then we found a path
+      if loaded then
+        loaded = dofile(loaded);
+      end
+
       --Save whatever we found
       g._LOADED[path] = loaded;
 
