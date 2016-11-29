@@ -158,9 +158,9 @@ module.inject = function(g)
     end,
 
     --These function are not really anything to do with FS. They operate purely on paths
-    getName = _fs.getName,
-    combine = _fs.combine,
-    getDir = _fs.getDir
+    getName = pfs.getName,
+    combine = pfs.combine,
+    getDir = pfs.getDir
   };
 end
 
