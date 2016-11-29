@@ -1,4 +1,6 @@
-function search(frag, query)
+local module = {}
+
+local function search(frag, query)
   local path = string.gsub(frag, "?", query);
 
   if fs.exists(path) and not fs.isDir(path) then
@@ -8,7 +10,7 @@ function search(frag, query)
   return nil;
 end
 
-return function(g)
+module.inject = function(g)
 
   local loaded_index = {};
   g._LOADED = loaded_index;
@@ -49,3 +51,5 @@ return function(g)
     return loaded;
   end
 end
+
+return module;
