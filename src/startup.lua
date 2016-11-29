@@ -1,5 +1,7 @@
 local function init_require(g)
-  dofile("ns/rq/require.lua").inject(g);
+  local rq = dofile("ns/rq/require.lua");
+  print(rq);
+  rq.inject(g);
 end
 
 local function init_filesystem(g)
@@ -51,6 +53,7 @@ local function boot()
     print("-> Loading " .. name);
     prefix = " | " .. short_name .. ": ";
 
+    print(load_func)
     load_func(_G);
 
     prefix = "";
@@ -59,7 +62,7 @@ local function boot()
 
   default_print("Loading Neutron Screwdriver");
 
-  pretty_load("Loader", "RQ", init_require);
+  pretty_load("Dependency Loader", "RQ", init_require);
   pretty_load("File System", "FS", init_filesystem);
   --pretty_load("Shell", "SH", init_shell);
   --pretty_load("Network", "NT", init_network)
