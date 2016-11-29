@@ -1,5 +1,6 @@
 local function init_filesystem()
-  local fs = require("ns/fs/fs.lua")
+  local fs = require("ns/fs/fs.lua");
+  print(fs);
   fs.inject(_G);
 
   --Mount the root of the internal ROM to the path "rom"

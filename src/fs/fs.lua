@@ -46,7 +46,7 @@ local function make_mount_func(name, default, func)
   end
 end
 
-function module.inject(g)
+module.inject = function(g)
   --Save the parent FS table
   local pfs = g.fs;
 
@@ -163,3 +163,5 @@ function module.inject(g)
     getDir = _fs.getDir
   };
 end
+
+return module;
