@@ -1,15 +1,18 @@
 local function init_require(g)
-  local rq = dofile("ns/rq/require.lua");
+  local rq = dofile("ns/rq/require");
   rq.inject(g);
 end
 
 local function init_filesystem(g)
-  local fs = require("ns/fs/fs.lua");
+  --Save parent FS
+  local pfs = g.fs;
+
+  --Inject new FS
+  local fs = require("ns/fs/fs");
   fs.inject(g);
 
-  print(g.fs);
-
   --Mount the root of the internal ROM to the path "rom"
+  local fsmount = require("fs/mounts/fsmount");
   g.fs.mount("rom", fsmount.create(pfs, "/rom"));
   print("Mounted local ROM @ /rom");
 
@@ -18,7 +21,7 @@ local function init_filesystem(g)
 end
 
 local function init_shell(g)
-  dofile("ns/sh/sh.lua").inject(_G);
+  dofile("ns/sh/sh").inject(_G);
 end
 
 local function init_network(g)
