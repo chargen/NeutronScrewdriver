@@ -1,52 +1,59 @@
-function create_fs()
+local module = {};
+
+local fsmount = require("ns/fs/mounts/fsmount");
+
+--Split a path on the / path separator, return table of parts
+local function SplitPath(path)
+  local parts = {};
+  for part in string.gmatch(path, "[^/]+") do
+      table.insert(parts, part);
+  end
+  return parts;
+end
+
+--Given a complete file path, find the appropriate mount to satisfy this path
+--Return the path into the mount, the mount, and the error
+local function GetMount(path)
+  local parts = SplitPath(path);
+
+  --Attempting to access the root
+  if #parts == 0 then
+    return parts, rootAccessor, "ok";
+  end
+
+  --Find the mount for the first part of this path
+  local mount = mounts[parts[1]];
+  table.remove(parts, 1);
+
+  --No such mount!
+  if not mount then
+    return parts, nil, "not found";
+  end
+
+  return parts, mount, "ok";
+end
+
+--Helper function for making mount point functions which just pass to an function on the mount with the same name
+local function make_mount_func(name, default, func)
+  return function(path)
+    local parts, mount, status = GetMount(path);
+    if mount then
+      local f = func(mount);
+      return f(table.concat(parts, "/"))
+    else
+      return default;
+    end
+  end
+end
+
+function module.inject(g)
+  --Save the parent FS table
+  local pfs = g.fs;
+
   --list of mounted paths (Path => Accessor)
   local mounts = {};
 
-  --Save the normal computercraft FS table
-  local _fs = _G.fs;
-
-  --Create a mount which accesses part of the normal filesystem under some path
-  local function CreateFilesystemMount(root)
-
-    local verbose = false;
-
-    function make_path_func(name)
-      return function(path)
-        local p = _fs.combine(root, path);
-        local f = _fs[name];
-        local r = f(p);
-        if verbose then print(name .. " @ " .. p .. " == " .. tostring(r)); end
-        return r;
-      end
-    end
-
-    return {
-      root = function()
-        return root;
-      end,
-
-      open = function(path, mode)
-        if verbose then
-          print("Open(" .. tostring(mode) .. ") @ " .. tostring(path))
-        end
-        return _fs.open(_fs.combine(root, path), mode);
-      end,
-
-      isReadonly = make_path_func("isReadonly"),
-      delete = make_path_func("delete"),
-      isDir = make_path_func("isDir"),
-      getFreeSpace = make_path_func("getFreeSpace"),
-      getDrive = make_path_func("getDrive"),
-      getSize = make_path_func("getSize"),
-      list = make_path_func("list"),
-      exists = make_path_func("exists"),
-      makeDir = make_path_func("makeDir"),
-      find = make_path_func("find")
-    };
-  end
-
-  --an accessor for the root of the system
-  --in all the root accessor methods the 'path' parameter is ignored. This is because it accesses the root, so the path must always be "/"
+  --an accessor specifically for the path / (which is simply a directory of all the mount points)
   local rootAccessor = {
 
     --Simply list all the mount points
@@ -104,65 +111,8 @@ function create_fs()
     --todo: find function(wildcard)
   };
 
-  --Split a path on the / path separator
-  local function SplitPath(path)
-    local parts = {};
-    for part in string.gmatch(path, "[^/]+") do
-        table.insert(parts, part);
-    end
-    return parts;
-  end
-
-  --Given a complete file path, find the appropriate mount to satisfy this path
-  --Return the path into the mount, the mount, and the error
-  local function GetMount(path)
-    local parts = SplitPath(path);
-
-    --Attempting to access the root
-    if #parts == 0 then
-      return parts, rootAccessor, "ok";
-    end
-
-    --Find the mount for the first part of this path
-    local mount = mounts[parts[1]];
-    table.remove(parts, 1);
-
-    --No such mount!
-    if not mount then
-      return parts, nil, "not found";
-    end
-
-    return parts, mount, "ok";
-  end
-
-  function make_mount_func(name, default, func)
-    return function(path)
-      local parts, mount, status = GetMount(path);
-      if mount then
-        local f = func(mount);
-        return f(table.concat(parts, "/"))
-      else
-        return default;
-      end
-    end
-  end
-
-  local fs = {
-
-    --Mount an accessor at a given path. An accessor must implement:
-    --[[
-      open function(path, mode)
-      isReadonly function(path)
-      delete function(path)
-      isDir function(path)
-      getFreeSpace function(path)
-      getDrive function(path)
-      getSize function(path)
-      list function(path)
-      exists function(path)
-      makeDir function(path)
-      find function(path)
-    ]]
+  --Create the object we're going to substitute for FS
+  g.fs = {
     mount = function(path, accessor)
       if mounts[path] ~= nil then
         error("There is already a mount at '" .. path .. "'");
@@ -211,21 +161,5 @@ function create_fs()
     getName = _fs.getName,
     combine = _fs.combine,
     getDir = _fs.getDir
-  }
-
-  --Mount the root of the internal ROM to the path "rom"
-  fs.mount("rom", CreateFilesystemMount("/rom"));
-  print("Mounted local ROM @ /rom");
-
-  --Test requireing things
-  local mod = require("ns/fs/test.lua");
-  mod.hello_world();
-
-  return fs;
-
-end
-
---Return an injector function which will inject the FS into the given object
-return function(g)
-  g.fs = create_fs();
+  };
 end

@@ -23,7 +23,8 @@ return {
   },
 
   { file = "fs/fs.lua" },
-  { file = "fs/test.lua" },
+  { file = "fs/mounts/disk.lua" },
+  { file = "fs/mounts/fsmount.lua" },
 
   { file = "rq/require.lua" },
 

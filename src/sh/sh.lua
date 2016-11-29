@@ -1,4 +1,5 @@
-function create_shell()
-  
+local module = {};
+
+function module.inject(g)
+  g.shell = {};
 end
-return create_shell();
