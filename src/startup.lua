@@ -56,7 +56,7 @@ local function boot()
   default_print("Loading Neutron Screwdriver");
 
   --Loader initialization is different (because it can't rely on the loader!)
-  pretty_load("Loader", "RQ", function() return dofile("ns/rq/require.lua"); end);
+  pretty_load("Loader", "RQ", function() return dofile("ns/rq/require.lua").inject; end);
 
   pretty_load("File System", "FS", init_filesystem);
   --pretty_load("Shell", "SH", init_shell);
