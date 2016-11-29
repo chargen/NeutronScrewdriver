@@ -1,3 +1,7 @@
+local function init_require(g)
+  dofile("ns/rq/require.lua").inject(g);
+end
+
 local function init_filesystem(g)
   local fs = require("ns/fs/fs.lua");
   fs.inject(g);
@@ -47,7 +51,7 @@ local function boot()
     print("-> Loading " .. name);
     prefix = " | " .. short_name .. ": ";
 
-    local inject = load_func(_G);
+    load_func(_G);
 
     prefix = "";
     print("<- Loaded " .. name);
@@ -55,9 +59,7 @@ local function boot()
 
   default_print("Loading Neutron Screwdriver");
 
-  --Loader initialization is different (because it can't rely on the loader!)
-  pretty_load("Loader", "RQ", function() return dofile("ns/rq/require.lua").inject; end);
-
+  pretty_load("Loader", "RQ", init_loader);
   pretty_load("File System", "FS", init_filesystem);
   --pretty_load("Shell", "SH", init_shell);
   --pretty_load("Network", "NT", init_network)
