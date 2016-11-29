@@ -1,5 +1,5 @@
 local function init_require(g)
-  local rq = dofile("ns/rq/require");
+  local rq = dofile("ns/rq/require.lua");
   rq.inject(g);
 end
 
