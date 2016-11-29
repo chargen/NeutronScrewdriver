@@ -1,6 +1,6 @@
-local function init_filesystem()
+local function init_filesystem(g)
   local fs = require("ns/fs/fs.lua");
-  fs.inject(_G);
+  fs.inject(g);
 
   --Mount the root of the internal ROM to the path "rom"
   g.fs.mount("rom", fsmount.create(pfs, "/rom"));
@@ -10,11 +10,11 @@ local function init_filesystem()
   --todo: ^
 end
 
-local function init_shell()
+local function init_shell(g)
   dofile("ns/sh/sh.lua").inject(_G);
 end
 
-local function init_network()
+local function init_network(g)
 
 end
 
@@ -47,8 +47,7 @@ local function boot()
     print("-> Loading " .. name);
     prefix = " | " .. short_name .. ": ";
 
-    local inject = load_func();
-    inject(_G);
+    local inject = load_func(_G);
 
     prefix = "";
     print("<- Loaded " .. name);
