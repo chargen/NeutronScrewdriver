@@ -59,7 +59,7 @@ local function boot()
 
   default_print("Loading Neutron Screwdriver");
 
-  pretty_load("Loader", "RQ", init_loader);
+  pretty_load("Loader", "RQ", init_require);
   pretty_load("File System", "FS", init_filesystem);
   --pretty_load("Shell", "SH", init_shell);
   --pretty_load("Network", "NT", init_network)
