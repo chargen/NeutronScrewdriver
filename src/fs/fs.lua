@@ -13,7 +13,7 @@ end
 
 --Given a complete file path, find the appropriate mount to satisfy this path
 --Return the path into the mount, the mount, and the error
-local function GetMount(path)
+local function GetMount(mounts, path)
   local parts = SplitPath(path);
 
   --Attempting to access the root
@@ -34,9 +34,9 @@ local function GetMount(path)
 end
 
 --Helper function for making mount point functions which just pass to an function on the mount with the same name
-local function make_mount_func(name, default, func)
+local function make_mount_func(name, mounts, default, func)
   return function(path)
-    local parts, mount, status = GetMount(path);
+    local parts, mount, status = GetMount(mounts, path);
     if mount then
       local f = func(mount);
       return f(table.concat(parts, "/"))
@@ -127,23 +127,23 @@ module.inject = function(g)
 
     --Pass these functions directly onto the relevant mount point
     open = function(path, mode)
-      local parts, mount, status = GetMount(path);
+      local parts, mount, status = GetMount(mounts, path);
       if mount then
         return mount.open(table.concat(parts, "/"), mode);
       else
         return default;
       end
     end,
-    isReadonly   = make_mount_func("isReadnly",    nil, function(m) return m.isReadonly end),
-    delete       = make_mount_func("delete",       nil, function(m) return m.delete end),
-    isDir        = make_mount_func("isDir",        nil, function(m) return m.isDir end),
-    getFreeSpace = make_mount_func("getFreeSpace", nil, function(m) return m.getFreeSpace end),
-    getDrive     = make_mount_func("getDrive",     nil, function(m) return m.getDrive end),
-    getSize      = make_mount_func("getSize",      nil, function(m) return m.getSize end),
-    list         = make_mount_func("list",         nil, function(m) return m.list end),
-    exists       = make_mount_func("exists",       nil, function(m) return m.exists end),
-    makeDir      = make_mount_func("makeDir",      nil, function(m) return m.makeDir end),
-    find         = make_mount_func("find",         nil, function(m) return m.find end),
+    isReadonly   = make_mount_func("isReadnly",    mounts, nil, function(m) return m.isReadonly end),
+    delete       = make_mount_func("delete",       mounts, nil, function(m) return m.delete end),
+    isDir        = make_mount_func("isDir",        mounts, nil, function(m) return m.isDir end),
+    getFreeSpace = make_mount_func("getFreeSpace", mounts, nil, function(m) return m.getFreeSpace end),
+    getDrive     = make_mount_func("getDrive",     mounts, nil, function(m) return m.getDrive end),
+    getSize      = make_mount_func("getSize",      mounts, nil, function(m) return m.getSize end),
+    list         = make_mount_func("list",         mounts, nil, function(m) return m.list end),
+    exists       = make_mount_func("exists",       mounts, nil, function(m) return m.exists end),
+    makeDir      = make_mount_func("makeDir",      mounts, nil, function(m) return m.makeDir end),
+    find         = make_mount_func("find",         mounts, nil, function(m) return m.find end),
 
     move = function(from, to)
       error("Not Implemented!");
