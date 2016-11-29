@@ -26,6 +26,8 @@ return {
   { file = "fs/mounts/disk.lua" },
   { file = "fs/mounts/fsmount.lua" },
 
+  { file = "nt/nt.lua" },
+
   { file = "rq/require.lua" },
 
   { file = "sh/sh.lua" }

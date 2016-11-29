@@ -1,8 +1,23 @@
-function init_filesystem()
-  local fs = dofile("ns/fs.lua");
+local function init_filesystem()
+  require("ns/fs/fs.lua").inject(_G);
+
+  --Mount the root of the internal ROM to the path "rom"
+  g.fs.mount("rom", fsmount.create(pfs, "/rom"));
+  print("Mounted local ROM @ /rom");
+
+  --Create disk mounts for sides where disks are present
+  --todo: ^
 end
 
-function boot()
+local function init_shell()
+  dofile("ns/sh/sh.lua").inject(_G);
+end
+
+local function init_network()
+  
+end
+
+local function boot()
   --Prevent the startup script from being terminated
   local pullEvent = os.pullEvent
   os.pullEvent = os.pullEventRaw
@@ -40,20 +55,12 @@ function boot()
 
   default_print("Loading Neutron Screwdriver");
 
+  --Loader initialization is different (because it can't rely on the loader!)
   pretty_load("Loader", "RQ", function() return dofile("ns/rq/require.lua"); end);
 
-  pretty_load("File System", "FS", function()
-    require("ns/fs/fs.lua").inject(_G);
-
-    --Mount the root of the internal ROM to the path "rom"
-    g.fs.mount("rom", fsmount.create(pfs, "/rom"));
-    print("Mounted local ROM @ /rom");
-
-    --Create disk mounts for sides where disks are present
-
-  end);
-
-  --pretty_load("Shell", "SH", function() _G.shell = return dofile("ns/sh/sh.lua").inject; end);
+  pretty_load("File System", "FS", init_filesystem);
+  --pretty_load("Shell", "SH", init_shell);
+  --pretty_load("Network", "NT", init_network)
 
   --restore default print
   print = default_print;
